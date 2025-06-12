@@ -13,9 +13,14 @@ namespace snake
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            ReInitializeGame();
+        }
+
+        private static void ReInitializeGame()
+        {
             _ui = new UI();
             _ui.labelscore.Text = "Punkte: " + _score.ToString();
-            Application.Run(_ui);
+            _ui.ShowDialog();
         }
 
 
@@ -49,8 +54,11 @@ namespace snake
             _ui.timer1.Stop();
             if (f) MessageBox.Show("Du hast echt kein Leben");
             else MessageBox.Show("Du hast verloren");
-            
 
+            _ui.Close();
+            _ui.Dispose();
+            _score = 0;
+            ReInitializeGame();
         }
 
     }
