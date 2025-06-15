@@ -14,6 +14,7 @@ namespace snake
         {
             Free,
             Apple,
+            SnakeTail,
             Snake,
             SnakeHead
         }
@@ -58,7 +59,42 @@ namespace snake
             _status = Status.Free;
             BackColor = Color.Transparent;
             Label.Text = null;
-           
         }
+
+        public void MakeSnakeTail()
+        {
+            _status = Status.SnakeTail;
+            BackColor = Color.Red;
+            Label.Text = null;
+        }
+
+        public bool Move(int newy, int newx, Field[,] fields)
+        {
+            Status currentstus = _status;
+            if( NEXT != null)
+            {
+                NEXT.Move(this.y, this.x, fields);
+            }
+
+            switch (currentstus)
+            {
+                case Status.SnakeHead:
+                    fields[newy, newx].MakeSnakeHead();
+                    fields[newy, newx].NEXT = this;
+                    break;
+
+                case Status.Snake:
+                    fields[newy, newx].MakeSnake();
+                    break;
+
+                case Status.SnakeTail:
+                    fields[newy, newx].MakeSnakeTail();
+                    fields[newy, newx].NEXT = null;
+                    MakeNormal();
+                    break;
+            }
+            return false;
+        }
+
     }
 }

@@ -7,11 +7,13 @@ namespace snake
 {
     public partial class UI : Form
     {
-        public static string _key;
+        private static string _key;
+        private static string _key2;
         public Field[,] fields = new Field[20, 36];
         public UI()
         {
             _key = "A";
+            _key2 = "A";
             InitializeComponent();
             CreateGamefield();
         }
@@ -31,7 +33,7 @@ namespace snake
             }
             fields[7, 10].MakeSnakeHead();
             fields[7, 10].NEXT = fields[7, 11];
-            fields[7, 11].MakeSnake();
+            fields[7, 11].MakeSnakeTail();
 
             Apple(3);
         }
@@ -64,12 +66,34 @@ namespace snake
         {
             if (e.KeyCode == Keys.W || e.KeyCode == Keys.A || e.KeyCode == Keys.S || e.KeyCode == Keys.D)
             {
-                _key = e.KeyCode.ToString();
+                switch(_key2)
+                {
+                    case "W":
+                        if ("S" == e.KeyCode.ToString()) break;
+                        _key = e.KeyCode.ToString();
+                        break;
+
+                    case "A":
+                        if ("D" == e.KeyCode.ToString()) break;
+                        _key = e.KeyCode.ToString();
+                        break;
+
+                    case "S":
+                        if ("W" == e.KeyCode.ToString()) break;
+                        _key = e.KeyCode.ToString();
+                        break;
+
+                    case "D":
+                        if ("A" == e.KeyCode.ToString()) break;
+                        _key = e.KeyCode.ToString();
+                        break;
+                }
             }
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            _key2 = _key;
             bool apple = true;
             Field field = null;
             
@@ -110,7 +134,7 @@ namespace snake
                     else Game.GameOver(false);
                     break;
             }
-            if (!apple)
+            if (apple)
             {
                 Game._score ++ ;
                 Apple(1);

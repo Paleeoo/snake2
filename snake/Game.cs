@@ -24,30 +24,30 @@ namespace snake
         }
 
 
-        public static bool move(Field field, int y, int x)
+        public static bool move(Field snake, int y, int x)
         {
-            bool apple = true;
-            if (_ui.fields[y, x]._status == Field.Status.Apple) apple = false;
-            
-            _ui.fields[y, x].MakeSnakeHead();
-            _ui.fields[y, x].NEXT = field;
-            while (true)
-            {
-                field.MakeSnake();
-                if (field.NEXT.NEXT == null)
-                {
-                    field.NEXT.MakeNormal();
-                    if (apple) field.NEXT = null;
-                    break;
-                }
-                field = field.NEXT;
-            }
+            bool apple = false;
 
+            switch (_ui.fields[y, x]._status)
+            {
+                case Field.Status.Apple:
+                    apple = true;
+                    snake.MakeSnake();
+                    _ui.fields[y, x].MakeSnakeHead();
+                    _ui.fields[y, x].NEXT = snake;
+                    break;
+
+
+                case Field.Status.SnakeTail:
+                case Field.Status.Free:
+                    snake.Move(y, x, _ui.fields);
+
+                    break;
+                default:
+                    break;
+            }
             return apple;
         }
-
-
-        
 
         public static void GameOver(bool f)
         {
